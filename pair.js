@@ -57,16 +57,27 @@ router.get('/', async (req, res) => {
                let session = await Pair_Code_By_France_King.sendMessage(Pair_Code_By_France_King.user.id, { text: ''+ b64data });
 
                let FLASH_MD_TEXT = `
-THANKYOU FOR CHOOSING ALONE MD
-🔙💚☯️♡𝐃𝐑𝐈𝐏 𝐅𝐀𝐌𝐈𝐋𝐘  .. 🤼 💫
-  ╭━━━━❤━━━━╮
-  💥VERY ACTIVE 🙅
-      🕊️𝐂𝐥𝐞𝐚𝐧 𝐚𝐥𝐰𝐚𝐲𝐬🍏
-  ╰━━━━🥺━━━━╯💚🔙
-❒ 𝐖𝐚𝐂𝐡𝐚𝐧𝐧𝐞𝐥: _https://whatsapp.com/channel/0029VaeRrcnADTOKzivM0S1r_
-║ 
-follow our channel to learn how to deploy..
-Repository available at our channel`
+╔═══════════════✧═══════════════╗
+   💎 𝗧𝗛𝗔𝗡𝗞 𝗬𝗢𝗨 𝗙𝗢𝗥 𝗖𝗛𝗢𝗢𝗦𝗜𝗡𝗚 𝗘𝗥𝗡𝗘𝗦𝗧 𝗩𝟮 💎
+╚═══════════════✧═══════════════╝
+
+🚀 𝗣𝗢𝗪𝗘𝗥𝗘𝗗 𝗕𝗬: Ernest Tech House
+🧠 𝗔𝗨𝗧𝗢𝗠𝗔𝗧𝗘𝗗 𝗪𝗜𝗧𝗛: WhatsApp Bot Framework
+💼 𝗠𝗔𝗗𝗘 𝗙𝗢𝗥: Developers, Hustlers, and Legends
+
+🔧 𝗬𝗢𝗨𝗥 𝗦𝗘𝗦𝗦𝗜𝗢𝗡 𝗜𝗦 𝗥𝗘𝗔𝗗𝗬 🔧
+📦 Paste this key into your .env to start running the bot.
+
+📲 Need help or support?
+🧭 Join the WhatsApp Dev Channel now:
+_https://whatsapp.com/channel/0029VaeRrcnADTOKzivM0S1r_
+
+🛠️ Tutorials, Code, and Updates always dropping.
+
+─────────────✧─────────────
+👑 STAY REAL. STAY CODED.
+`
+
  await Pair_Code_By_France_King.sendMessage(Pair_Code_By_France_King.user.id,{text:FLASH_MD_TEXT},{quoted:session})
  
 

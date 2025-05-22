@@ -1,93 +1,241 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <title>𝐀𝐋𝐎𝐍𝐄 𝐌𝐃 𝐒𝐄𝐒𝐒𝐈𝐎𝐍 𝐒𝐂𝐀𝐍𝐍𝐄𝐑 </title>
+  <title>Ernest V2 | Control Panel</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary: #8a2be2;
+      --secondary: #ff1493;
+      --dark: #121212;
+      --light: #f8f8f8;
+      --accent: #00ffff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      display: flex; 
+      display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      min-height: 100vh;
       margin: 0;
-      background-image:  url("https://files.catbox.moe/kxfnln.mp4"); /* set the background image */
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      font-family: 'Poppins', sans-serif;
+      overflow-x: hidden;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .logo {
+      font-size: 3rem;
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .subtitle {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 1rem;
+      font-weight: 300;
+    }
+
+    .menu {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      width: 90%;
+      max-width: 800px;
+      padding: 20px;
     }
 
     .btn {
-      --color: #e5f5f1;
-      --color2: rgb(0, 0, 0);
-      width: 200px;
-      padding: 0.8em 1.75em;
-      background-color: Green;
-      border-radius: 6px;
-      border: .3px solid var(--color);
-      transition: .5s;
+      --color: #ffffff;
+      --color2: #000000;
+      padding: 1.2em 1.5em;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       position: relative;
       overflow: hidden;
       cursor: pointer;
       z-index: 1;
-      font-weight: 300;
-      font-size: 17px;
-      font-family: 'Roboto', 'Segoe UI', sans-serif;
+      font-weight: 500;
+      font-size: 1rem;
       text-transform: uppercase;
       color: var(--color);
-      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
 
-    .btn::after, .btn::before {
-      content: '';
-      display: block;
-      height: 100%;
-      width: 100%;
-      transform: skew(90deg) translate(-50%, -50%);
-      position: absolute;
-      inset: 50%;
-      left: 25%;
-      z-index: -1;
-      transition: .5s ease-out;
-      background-color: var(--color);
+    .btn i {
+      margin-right: 10px;
+      font-size: 1.2rem;
     }
 
     .btn::before {
-      top: -50%;
-      left: -25%;
-      transform: skew(90deg) rotate(180deg) translate(-50%, -50%);
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      z-index: -1;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.4s ease-out;
     }
 
     .btn:hover::before {
-      transform: skew(45deg) rotate(180deg) translate(-50%, -50%);
-    }
-
-    .btn:hover::after {
-      transform: skew(45deg) translate(-50%, -50%);
+      transform: scaleX(1);
+      transform-origin: left;
     }
 
     .btn:hover {
       color: var(--color2);
+      box-shadow: 0 8px 25px rgba(138, 43, 226, 0.4);
+      transform: translateY(-3px);
     }
 
     .btn:active {
-      filter: brightness(.7);
-      transform: scale(.98);
+      transform: translateY(0);
+    }
+
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    @media (max-width: 600px) {
+      .menu {
+        grid-template-columns: 1fr;
+      }
+
+      .logo {
+        font-size: 2.2rem;
+      }
     }
   </style>
 </head>
+
 <body>
+  <div class="particles" id="particles"></div>
 
-  <button onclick="window.open(`https://topu-scanner.onrender.com/qr`)" class="btn">qr code</button>
-  <button onclick="window.open(`/pair`)" class="btn">pair code</button>
-  <button onclick="window.open(`https://github.com/Toputech/ALONE-MD-V1`)" class="btn">github</button>
-  <button onclick="window.open(`https://wa.me/message/6ST5TFZLH6BGF1`)" class="btn">Contact Me</button>
-  <button onclick="window.open(`https://dashboard.heroku.com/new?template=https://github.com/Toputech/Alone`)" class="btn">Deploy TOPU MD</button>
-  <button onclick="window.open(`https://chat.whatsapp.com/BxelCdrHnDYBNfMy2jafgI`)" class="btn">Wa Group</button>
-  <button onclick="window.open(`https://whatsapp.com/channel/0029VaeRrcnADTOKzivM0S1r`)" class="btn">Wa Channel</button>
+  <div class="header">
+    <div class="logo">Ernest V2</div>
+    <div class="subtitle">SESSION CONTROL PANEL</div>
+  </div>
 
+  <div class="menu">
+    <button onclick="window.open('/qr')" class="btn">
+      <i class="fas fa-qrcode"></i> QR Code
+    </button>
 
-  
-  
-  
+    <button onclick="window.open('/pair')" class="btn">
+      <i class="fas fa-code"></i> Pair Code
+    </button>
 
+    <button onclick="window.open('https://github.com/PeaseErnest12287/rola-v1-sesiongenerator.git')" class="btn">
+      <i class="fab fa-github"></i> GitHub
+    </button>
+
+    <button onclick="window.open('https://wa.me/254793859108?text=Hello%20I%20wish%20to%20know%20about%20the%20bot')"
+      class="btn">
+      <i class="fab fa-whatsapp"></i> Contact Me
+    </button>
+
+    <!-- Font Awesome (only needed once in your <head> or before this button) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <button onclick="window.open('https://github.com/PeaseErnest12287/rola-v1-sesiongenerator.git')" class="btn">
+      <i class="fas fa-cloud-upload-alt"></i> Deploy Ernest V2
+    </button>
+
+    <button onclick="window.open('https://chat.whatsapp.com/FAJjIZY3a09Ck73ydqMs4E')" class="btn">
+      <i class="fas fa-users"></i> WA Group
+    </button>
+
+    <button onclick="window.open('https://whatsapp.com/channel/0029VaeRrcnADTOKzivM0S1r')" class="btn">
+      <i class="fas fa-bullhorn"></i> WA Channel
+    </button>
+  </div>
+
+  <script>
+    // Create floating particles
+    const particlesContainer = document.getElementById('particles');
+    const particleCount = 30;
+
+    for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('particle');
+
+      const size = Math.random() * 5 + 2;
+      const posX = Math.random() * 100;
+      const posY = Math.random() * 100;
+      const delay = Math.random() * 5;
+      const duration = Math.random() * 10 + 10;
+
+      particle.style.width = `${size}px`;
+      particle.style.height = `${size}px`;
+      particle.style.left = `${posX}%`;
+      particle.style.top = `${posY}%`;
+      particle.style.opacity = Math.random() * 0.5 + 0.1;
+      particle.style.animation = `float ${duration}s ease-in-out ${delay}s infinite`;
+
+      particlesContainer.appendChild(particle);
+    }
+
+    // Add floating animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes float {
+        0% {
+          transform: translate(0, 0) rotate(0deg);
+        }
+        50% {
+          transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) rotate(180deg);
+        }
+        100% {
+          transform: translate(0, 0) rotate(360deg);
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
 </body>
+
 </html>
