@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ernest V2 | Session Scanner</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <title>Ernest V2 | Pair Code Generator</title> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -106,8 +105,14 @@
     .subtitle {
       color: rgba(255, 255, 255, 0.7);
       font-size: 0.9rem;
-      margin-bottom: 25px;
+      margin-bottom: 15px; /* Adjusted margin */
       font-weight: 300;
+    }
+
+    .note-message {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.75rem;
+      margin-bottom: 25px; /* Adjusted margin */
     }
     
     .input-container {
@@ -159,14 +164,14 @@
       margin-left: 8px;
     }
     
-    #waiting-message {
+    #loading-message { /* Renamed for clarity */
       display: none;
       color: var(--accent);
       font-size: 0.9rem;
       margin: 15px 0;
     }
     
-    #pair {
+    #pair-code-display { /* Renamed for clarity */
       width: 100%;
       min-height: 60px;
       margin-top: 20px;
@@ -178,6 +183,7 @@
       align-items: center;
       justify-content: center;
       transition: all 0.3s ease;
+      word-break: break-all; /* Ensure long codes wrap */
     }
     
     #copy {
@@ -220,6 +226,12 @@
       border-radius: 50%;
       pointer-events: none;
     }
+
+    @keyframes float { /* Added float keyframes to CSS */
+        0% { transform: translate(0, 0) rotate(0deg); }
+        50% { transform: translate(var(--dx), var(--dy)) rotate(180deg); }
+        100% { transform: translate(0, 0) rotate(360deg); }
+    }
     
     @media (max-width: 500px) {
       .box {
@@ -248,24 +260,23 @@
       <div class="box" id="box">
         <div id="text">
           <div class="logo">Ernest V2</div>
-          <p class="subtitle">SESSION SCANNER</p>
-          <p class="subtitle">Enter Your Number with Country Code</p>
+          <p class="subtitle">SESSION PAIR CODE GENERATOR</p>
+          <p class="subtitle">Enter Your WhatsApp Number</p>
+          <p class="note-message">Include country code (e.g., 255673xxxxxx)</p>
           <div class="input-container">
             <input placeholder="255673xxxxxx" type="number" id="number" name="">
             <button id="submit"><i class="fas fa-paper-plane"></i></button>
           </div>
-          <a id="waiting-message" style="display: none;">Please wait while we process your request...</a>
-          <main id="pair"></main>
-        </div>
+          <a id="loading-message"></a> <main id="pair-code-display"></main> </div>
       </div>
     </div>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"></script>
   <script>
-    let a = document.getElementById("pair");
-    let b = document.getElementById("submit");
-    let c = document.getElementById("number");
-    let box = document.getElementById("box");
+    let pairCodeElement = document.getElementById("pair-code-display"); // Renamed variable
+    let submitButton = document.getElementById("submit"); // Renamed variable
+    let numberInput = document.getElementById("number"); // Renamed variable
+    let loadingMessage = document.getElementById("loading-message"); // Renamed variable
 
     // Create particles
     const particlesContainer = document.getElementById('particles');
@@ -287,54 +298,62 @@
       particle.style.top = `${posY}%`;
       particle.style.opacity = Math.random() * 0.5 + 0.1;
       particle.style.animation = `float ${duration}s ease-in-out ${delay}s infinite`;
+      // Set custom properties for random movement in @keyframes float
+      particle.style.setProperty('--dx', `${Math.random() * 100 - 50}px`);
+      particle.style.setProperty('--dy', `${Math.random() * 100 - 50}px`);
       
       particlesContainer.appendChild(particle);
     }
 
     async function Copy() {
-      let text = document.getElementById("copy").innerText;
-      let obj = document.getElementById("copy");
+      let copyElement = document.getElementById("copy"); // Get the element by ID
+      let textToCopy = copyElement.querySelector('span').innerText; // Get the code from the span
+
       try {
-        await navigator.clipboard.writeText(obj.innerText.replace('CODE: ', ''));
-        obj.innerHTML = '<i class="fas fa-check"></i> COPIED!';
-        obj.style.color = "var(--accent)";
+        await navigator.clipboard.writeText(textToCopy); // Copy only the code
+        copyElement.innerHTML = '<i class="fas fa-check"></i> COPIED!';
+        copyElement.style.color = "var(--accent)";
         setTimeout(() => {
-          obj.innerHTML = `<i class="fas fa-copy"></i> ${text}`;
-          obj.style.color = "white";
+          copyElement.innerHTML = `<i class="fas fa-copy"></i> CODE: <span style="color: var(--accent); font-weight: 700;">${textToCopy}</span>`;
+          copyElement.style.color = "white";
         }, 2000);
       } catch (err) {
         console.error('Failed to copy: ', err);
       }
     }
 
-    b.addEventListener("click", async (e) => {
+    submitButton.addEventListener("click", async (e) => {
       e.preventDefault();
-      a.innerHTML = '';
+      pairCodeElement.innerHTML = ''; // Clear previous content
       
-      if (!c.value) {
-        a.innerHTML = '<div class="error-message">Please enter your WhatsApp number with country code</div>';
+      let rawNumber = numberInput.value.replace(/[^0-9]/g, "");
+
+      if (!rawNumber) {
+        pairCodeElement.innerHTML = '<div class="error-message">Please enter your WhatsApp number with country code.</div>';
         return;
       }
       
-      if (c.value.replace(/[^0-9]/g, "").length < 11) {
-        a.innerHTML = '<div class="error-message">Invalid phone number format</div>';
+      if (rawNumber.length < 10) { // More robust check
+        pairCodeElement.innerHTML = '<div class="error-message">Invalid phone number format. Please provide a valid number with country code (min 10 digits).</div>';
         return;
       }
       
-      const France_King = c.value.replace(/[^0-9]/g, "");
-      let formattedNumber = "+" + France_King.replace(/(\d{3})(\d{3})(\d+)/, "$1 $2 $3");
+      let formattedDisplayNumber = "+" + rawNumber.replace(/(\d{3})(\d{3})(\d+)/, "$1 $2 $3");
       
-      c.type = "text";
-      c.value = formattedNumber;
-      c.style.color = "var(--accent)";
-      c.style.fontWeight = "bold";
+      numberInput.type = "text";
+      numberInput.value = formattedDisplayNumber;
+      numberInput.style.color = "var(--accent)";
+      numberInput.style.fontWeight = "bold";
       
-      a.innerHTML = '<div style="color: rgba(255,255,255,0.7)"><i class="fas fa-spinner fa-spin"></i> Generating your code...</div>';
+      loadingMessage.style.display = 'block'; // Show loading message
+      loadingMessage.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating your code...';
       
       try {
-        let { data } = await axios(`/code?number=${France_King}`);
+        let { data } = await axios(`/pair?number=${rawNumber}`); // Use /pair endpoint
         let code = data.code || "Service Unavailable";
-        a.innerHTML = `
+
+        loadingMessage.style.display = 'none'; // Hide loading message
+        pairCodeElement.innerHTML = `
           <div id="copy" onclick="Copy()" style="color: white; font-weight: 500; font-size: 1.1rem;">
             <i class="fas fa-copy"></i> CODE: <span style="color: var(--accent); font-weight: 700;">${code}</span>
           </div>
@@ -343,7 +362,8 @@
           </div>
         `;
       } catch (error) {
-        a.innerHTML = '<div class="error-message">Error generating code. Please try again.</div>';
+        loadingMessage.style.display = 'none'; // Hide loading message
+        pairCodeElement.innerHTML = '<div class="error-message">Error generating code. Please ensure your number is valid and try again.</div>';
         console.error('Error:', error);
       }
     });
