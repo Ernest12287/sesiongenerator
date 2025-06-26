@@ -1,235 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
-  <title>Ernest V2 | Control Panel</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>Ernest Tech House Bot Session ID Generator</title>
+  <meta property="og:image" content="https://i.imgur.com/vHqB5j3.png"> <meta property="og:title" content="Ernest Tech House Bot">
   <style>
-    :root {
-      --primary: #8a2be2;
-      --secondary: #ff1493;
-      --dark: #121212;
-      --light: #f8f8f8;
-      --accent: #00ffff;
-    }
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;700&family=Roboto+Mono:wght@300;500&display=swap');
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    :root {
+      --bg-color: #0d0d1a;
+      --text-color: #e0e0e0;
+      --accent-color-light: #00bcd4; /* Light cyan */
+      --accent-color-dark: #007bff;  /* Blue */
+      --button-bg-start: #2196f3;
+      --button-bg-end: #00bcd4;
+      --border-gradient-start: #ffae00;
+      --border-gradient-mid: #7e03aa;
+      --border-gradient-end: #00fffb;
+      --shadow-color: rgba(0, 0, 0, 0.7);
     }
 
     body {
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       min-height: 100vh;
-      margin: 0;
-      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-      font-family: 'Poppins', sans-serif;
-      overflow-x: hidden;
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .logo {
-      font-size: 3rem;
-      background: linear-gradient(45deg, var(--primary), var(--secondary));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      font-weight: 700;
-      letter-spacing: 2px;
-      margin-bottom: 10px;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-      transition: all 0.3s ease; /* Added transition */
-    }
-
-    .logo:hover { /* Added hover effect */
-        transform: scale(1.05);
-        text-shadow: 0 4px 15px rgba(138, 43, 226, 0.6);
-    }
-
-    .subtitle {
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 1rem;
-      font-weight: 300;
-    }
-
-    .menu {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      width: 90%;
-      max-width: 800px;
-      padding: 20px;
-    }
-
-    .btn {
-      --color: #ffffff;
-      --color2: #000000;
-      padding: 1.2em 1.5em;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      position: relative;
+      flex-direction: column;
+      background-color: var(--bg-color);
+      font-family: 'Montserrat', sans-serif;
+      color: var(--text-color);
       overflow: hidden;
-      cursor: pointer;
-      z-index: 1;
-      font-weight: 500;
-      font-size: 1rem;
-      text-transform: uppercase;
-      color: var(--color);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      backdrop-filter: blur(5px);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      margin: 0;
+      position: relative;
     }
 
-    .btn i {
-      margin-right: 10px;
-      font-size: 1.2rem;
-    }
-
-    .btn::before {
+    body::before {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      background: radial-gradient(circle at center, rgba(0,188,212,0.1) 0%, transparent 70%),
+                  url('https://www.transparenttextures.com/patterns/cubes.png'); /* Another tech texture */
+      opacity: 0.3;
+      z-index: 0;
+    }
+
+    #main {
+      text-align: center;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      font-size: clamp(2em, 5vw, 3.5em);
+      color: var(--accent-color-light);
+      margin-bottom: 20px;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+    }
+
+    h3 {
+      font-weight: 400;
+      color: var(--text-color);
+      letter-spacing: 0.05em;
+      font-size: clamp(1em, 2.5vw, 1.5em);
+      margin-top: 0;
+      margin-bottom: 40px;
+    }
+
+    .animated-text span {
+      display: inline-block;
+      opacity: 0;
+      filter: blur(4px);
+      animation: fade-in 0.8s forwards cubic-bezier(0.11, 0, 0.5, 0);
+    }
+
+    /* Staggering animation */
+    .animated-text span:nth-child(1) { animation-delay: 0.1s; }
+    .animated-text span:nth-child(2) { animation-delay: 0.2s; }
+    .animated-text span:nth-child(3) { animation-delay: 0.3s; }
+    .animated-text span:nth-child(4) { animation-delay: 0.4s; }
+    .animated-text span:nth-child(5) { animation-delay: 0.5s; }
+    .animated-text span:nth-child(6) { animation-delay: 0.6s; }
+    .animated-text span:nth-child(7) { animation-delay: 0.7s; }
+    .animated-text span:nth-child(8) { animation-delay: 0.8s; }
+    .animated-text span:nth-child(9) { animation-delay: 0.9s; }
+    .animated-text span:nth-child(10) { animation-delay: 1.0s; }
+    .animated-text span:nth-child(11) { animation-delay: 1.1s; }
+    .animated-text span:nth-child(12) { animation-delay: 1.2s; }
+
+    @keyframes fade-in {
+      100% {
+        opacity: 1;
+        filter: blur(0);
+      }
+    }
+
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 350px;
+      margin: 0 auto;
+    }
+
+    .button {
+      width: 100%;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 0 20px;
+      background: linear-gradient(0deg, #10101a, #2a2a3e); /* Dark gradient */
+      border-radius: 12px;
+      border: none;
+      color: var(--text-color);
+      font-weight: 600;
+      font-size: 1.1em;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+      text-decoration: none; /* For anchor tags */
+    }
+
+    .button::before, .button::after {
+      content: '';
+      position: absolute;
+      left: -2px;
+      top: -2px;
+      border-radius: 12px;
+      background: linear-gradient(45deg, var(--border-gradient-start), var(--border-gradient-mid), var(--border-gradient-end), var(--border-gradient-start));
+      background-size: 400%;
+      width: calc(100% + 4px);
+      height: calc(100% + 4px);
       z-index: -1;
-      transform: scaleX(0);
-      transform-origin: right;
-      transition: transform 0.4s ease-out;
+      animation: steam 20s linear infinite;
+      transition: opacity 0.3s ease;
+      opacity: 0; /* Hidden by default */
     }
 
-    .btn:hover::before {
-      transform: scaleX(1);
-      transform-origin: left;
+    .button:hover::before {
+      opacity: 1; /* Show on hover */
     }
 
-    .btn:hover {
-      color: var(--color2);
-      box-shadow: 0 8px 25px rgba(138, 43, 226, 0.4);
+    .button::after {
+      filter: blur(25px);
+    }
+
+    @keyframes steam {
+      0% { background-position: 0 0; }
+      50% { background-position: 400% 0; }
+      100% { background-position: 0 0; }
+    }
+
+    .button:hover {
+      color: #fff;
       transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
     }
 
-    .btn:active {
-      transform: translateY(0);
+    /* Specific button background override for a "pop" effect */
+    .button.primary {
+      background: linear-gradient(45deg, var(--button-bg-start), var(--button-bg-end));
+      box-shadow: 0 5px 15px rgba(0, 188, 212, 0.4);
+    }
+    .button.primary:hover {
+      background: linear-gradient(45deg, var(--button-bg-end), var(--button-bg-start));
+      box-shadow: 0 8px 20px rgba(0, 188, 212, 0.6);
     }
 
-    .particles {
-      position: fixed;
-      top: 0;
+
+    footer {
+      position: absolute;
+      bottom: 0;
       left: 0;
       width: 100%;
-      height: 100%;
-      z-index: -1;
-      pointer-events: none;
+      background-color: rgba(0, 0, 0, 0.5);
+      text-align: center;
+      padding: 15px;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.9em;
+      backdrop-filter: blur(5px);
+      z-index: 1;
     }
 
-    .particle {
-      position: absolute;
-      background: rgba(255, 255, 255, 0.5);
-      border-radius: 50%;
-      pointer-events: none;
-    }
-
-    @keyframes float { /* Added float keyframes to CSS */
-        0% { transform: translate(0, 0) rotate(0deg); }
-        50% { transform: translate(var(--dx), var(--dy)) rotate(180deg); }
-        100% { transform: translate(0, 0) rotate(360deg); }
-    }
-
-    @media (max-width: 600px) {
-      .menu {
-        grid-template-columns: 1fr;
-      }
-
-      .logo {
-        font-size: 2.2rem;
-      }
+    footer p {
+      margin: 0;
     }
   </style>
 </head>
-
 <body>
-  <div class="particles" id="particles"></div>
+  <div id="main">
+    <h1>
+      <span class="animated-text">SELECT ERNEST BOT INFO</span>
+    </h1>
+    <h3>
+      Get your QR or Pair code to connect your Ernest Bot instances.
+    </h3>
+    <input hidden type="text" name="value" value="ernest-tech-house-bot">
 
-  <div class="header">
-    <div class="logo">Ernest V2</div>
-    <div class="subtitle">SESSION CONTROL PANEL</div>
+    <div class="button-group">
+      <a href="/qr" class="button primary">QR CODE</a>
+      <a href="/pair" class="button">PAIR CODE</a>
+      <a href="https://github.com/Ernest12287/sesiongenerator.git" target="_blank" rel="noopener noreferrer" class="button">DEPLOY (GITHUB REPO)</a> <a href="https://wa.me/+94720797915" target="_blank" rel="noopener noreferrer" class="button">ERNEST SUPPORT</a>
+      <a href="https://whatsapp.com/channel/0029VayK4ty7DAWr0jeCZx0i" target="_blank" rel="noopener noreferrer" class="button">WHATSAPP CHANNEL</a>
+      <a href="https://github.com/Ernest12287" target="_blank" rel="noopener noreferrer" class="button">GITHUB</a>
+      <a href="http://youtube.com/" target="_blank" rel="noopener noreferrer" class="button">YOUTUBE</a> </div>
   </div>
 
-  <div class="menu">
-    <button onclick="window.open('/qr')" class="btn">
-      <i class="fas fa-qrcode"></i> QR Code
-    </button>
-
-    <button onclick="window.open('/pair')" class="btn">
-      <i class="fas fa-code"></i> Pair Code
-    </button>
-
-    <button onclick="window.open('https://github.com/PeaseErnest12287/rola-v1-sesiongenerator.git')" class="btn">
-      <i class="fab fa-github"></i> GitHub
-    </button>
-
-    <button onclick="window.open('https://wa.me/254793859108?text=Hello%20I%20wish%20to%20know%20about%20the%20bot')"
-      class="btn">
-      <i class="fab fa-whatsapp"></i> Contact Me
-    </button>
-
-    <button onclick="window.open('https://github.com/PeaseErnest12287/rola-v1-sesiongenerator.git')" class="btn">
-      <i class="fas fa-cloud-upload-alt"></i> Deploy Ernest V2 </button>
-
-    <button onclick="window.open('https://chat.whatsapp.com/FAJjIZY3a09Ck73ydqMs4E')" class="btn">
-      <i class="fas fa-users"></i> WA Group
-    </button>
-
-    <button onclick="window.open('https://whatsapp.com/channel/0029VaeRrcnADTOKzivM0S1r')" class="btn">
-      <i class="fas fa-bullhorn"></i> WA Channel
-    </button>
-  </div>
-
-  <script>
-    // Create floating particles
-    const particlesContainer = document.getElementById('particles');
-    const particleCount = 30;
-
-    for (let i = 0; i < particleCount; i++) {
-      const particle = document.createElement('div');
-      particle.classList.add('particle');
-
-      const size = Math.random() * 5 + 2;
-      const posX = Math.random() * 100;
-      const posY = Math.random() * 100;
-      const delay = Math.random() * 5;
-      const duration = Math.random() * 10 + 10;
-
-      particle.style.width = `${size}px`;
-      particle.style.height = `${size}px`;
-      particle.style.left = `${posX}%`;
-      particle.style.top = `${posY}%`;
-      particle.style.opacity = Math.random() * 0.5 + 0.1;
-      particle.style.animation = `float ${duration}s ease-in-out ${delay}s infinite`;
-      // Set custom properties for random movement in @keyframes float
-      particle.style.setProperty('--dx', `${Math.random() * 100 - 50}px`);
-      particle.style.setProperty('--dy', `${Math.random() * 100 - 50}px`);
-
-      particlesContainer.appendChild(particle);
-    }
-  </script>
+  <footer>
+    <p>&copy; ERNEST BOTS | SESSION ID GENERATOR</p>
+  </footer>
 </body>
-
 </html>

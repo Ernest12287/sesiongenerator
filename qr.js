@@ -1,41 +1,35 @@
 const PastebinAPI = require('pastebin-js'),
-    pastebin = new PastebinAPI('EMWTMkQAVfJa9kM-MRUrxd5Oku1U7pgL') // Keep your Pastebin API key
-const { makeid } = require('./id');
+    pastebin = new PastebinAPI('EMWTMkQAVfJa9kM-MRUrxd5Oku1U7pgL'); // Keep your API key
+const { makeid } = require('./id'); // Assuming './id' exists and has makeid
 const QRCode = require('qrcode');
 const express = require('express');
-const path = require('path');
 const fs = require('fs');
-let router = express.Router()
+let router = express.Router();
 const pino = require("pino");
 const {
-    makeWASocket, // Directly importing makeWASocket
+    default: Ernest_Bot,
     useMultiFileAuthState,
-    jidNormalizedUser,
-    Browsers,
     delay,
-    makeInMemoryStore,
-} = require("@whiskeysockets/baileys");
+    Browsers,
+} = require("@whiskeysockets/baileys"); // Updated import path
 
 function removeFile(FilePath) {
     if (!fs.existsSync(FilePath)) return false;
     fs.rmSync(FilePath, {
         recursive: true,
         force: true
-    })
-};
-const {
-    readFile
-} = require("node:fs/promises")
+    });
+}
 
 router.get('/', async (req, res) => {
     const id = makeid();
-    async function ERNEST_BOT_QR_CODE() {
+    async function ERN_QR_CODE() { // Renamed function
         const {
             state,
             saveCreds
-        } = await useMultiFileAuthState('./temp/' + id)
+        } = await useMultiFileAuthState('./temp/' + id);
         try {
-            let qrSock = makeWASocket({ // Using makeWASocket directly and renamed variable to qrSock
+            let Ernest_Qr_Code_Generator = Ernest_Bot({ // Renamed variable
                 auth: state,
                 printQRInTerminal: false,
                 logger: pino({
@@ -44,68 +38,51 @@ router.get('/', async (req, res) => {
                 browser: Browsers.macOS("Desktop"),
             });
 
-            qrSock.ev.on('creds.update', saveCreds)
-            qrSock.ev.on("connection.update", async (s) => {
+            Ernest_Qr_Code_Generator.ev.on('creds.update', saveCreds);
+            Ernest_Qr_Code_Generator.ev.on("connection.update", async (s) => {
                 const {
                     connection,
                     lastDisconnect,
                     qr
                 } = s;
-                if (qr) {
-                    if (!res.headersSent) {
-                        await res.end(await QRCode.toBuffer(qr));
-                    }
-                }
+                if (qr) await res.end(await QRCode.toBuffer(qr));
                 if (connection == "open") {
                     await delay(5000);
                     let data = fs.readFileSync(__dirname + `/temp/${id}/creds.json`);
                     await delay(800);
                     let b64data = Buffer.from(data).toString('base64');
-                    // Send the session ID to the bot's own number
-                    let sessionMessage = await qrSock.sendMessage(qrSock.user.id, { text: `WHATSAPP_SESSION="${b64data}"` });
+                    let session = await Ernest_Qr_Code_Generator.sendMessage(Ernest_Qr_Code_Generator.user.id, { text: "" + b64data });
 
-                    let ERNEST_V2_TEXT = `
-╔═══════════════✧═══════════════╗
-   💎 𝗧𝗛𝗔𝗡𝗞 𝗬𝗢𝗨 𝗙𝗢𝗥 𝗖𝗛𝗢𝗢𝗦𝗜𝗡𝗚 𝗘𝗥𝗡𝗘𝗦𝗧 𝗩𝟮 💎
-╚═══════════════✧═══════════════╝
-
-🚀 𝗣𝗢𝗪𝗘𝗥𝗘𝗗 𝗕𝗬: Ernest Tech House
-🧠 𝗔𝗨𝗧𝗢𝗠𝗔𝗧𝗘𝗗 𝗪𝗜𝗧𝗛: WhatsApp Bot Framework
-💼 𝗠𝗔𝗗𝗘 𝗙𝗢𝗥: Developers, Hustlers, and Legends
-
-🔧 𝗬𝗢𝗨𝗥 𝗦𝗘𝗦𝗦𝗜𝗢𝗡 𝗜𝗦 𝗥𝗘𝗔𝗗𝗬 🔧
-📦 Paste the key above into your .env to start running the bot.
-
-📲 Need help or support?
-🧭 Join the WhatsApp Dev Channel now:
-_https://chat.whatsapp.com/FAJjIZY3a09Ck73ydqMs4E_
-
-🛠️ Tutorials, Code, and Updates always dropping.
-
-─────────────✧─────────────
-👑 STAY REAL. STAY CODED.
-`
-
-                    await qrSock.sendMessage(qrSock.user.id, { text: ERNEST_V2_TEXT }, { quoted: sessionMessage })
+                    let ERNEST_WELCOME_MESSAGE = `
+┏━━━━━━━━━━━━━━━━━━━
+┃ Thank you for choosing Ernest Bots!
+┃ This session ID can be used for 2 bots:
+┃ ErnestV2 and Ernest Phantom.
+┃ Join the channel for more updates!
+┗━━━━━━━━━━━━━━━━━━━
+🔗 WhatsApp Channel: https://whatsapp.com/channel/0029VayK4ty7DAWr0jeCZx0i
+`;
+                    await Ernest_Qr_Code_Generator.sendMessage(Ernest_Qr_Code_Generator.user.id, { text: ERNEST_WELCOME_MESSAGE }, { quoted: session });
 
                     await delay(100);
-                    await qrSock.ws.close();
+                    await Ernest_Qr_Code_Generator.ws.close();
                     return await removeFile("temp/" + id);
                 } else if (connection === "close" && lastDisconnect && lastDisconnect.error && lastDisconnect.error.output.statusCode != 401) {
                     await delay(10000);
-                    ERNEST_BOT_QR_CODE();
+                    ERN_QR_CODE(); // Call the renamed function
                 }
             });
         } catch (err) {
             if (!res.headersSent) {
                 await res.json({
-                    code: "Service is Currently Unavailable"
+                    code: "Service Unavailable"
                 });
             }
-            console.log(err);
+            console.error("Error in QR code generation:", err); // Use console.error for errors
             await removeFile("temp/" + id);
         }
     }
-    return await ERNEST_BOT_QR_CODE()
+    return await ERN_QR_CODE(); // Call the renamed function
 });
-module.exports = router
+
+module.exports = router;
